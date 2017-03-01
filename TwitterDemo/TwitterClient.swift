@@ -8,6 +8,7 @@
 
 import UIKit
 import BDBOAuth1Manager
+import AFNetworking
 
 
 class TwitterClient: BDBOAuth1SessionManager {
@@ -17,6 +18,10 @@ class TwitterClient: BDBOAuth1SessionManager {
 
     static let sharedInstance = TwitterClient(baseURL: NSURL(string: "https://api.twitter.com") as URL!, consumerKey:
         "5Il3up1kWS1vgPa5D3dSxLOHh", consumerSecret: "RvnAJUBpAMdoCzvjslAfSBp2o76d8Oafug66ejNYMerx5TmUym")
+    
+    enum NetworkRequest{
+        case get, post
+    }
     
     
     func login(success:@escaping () -> (), failure:@escaping (NSError) -> () ){
@@ -29,7 +34,7 @@ class TwitterClient: BDBOAuth1SessionManager {
             if requestToken != nil {
                 
                 if requestToken!.token != nil {
-                    print(requestToken!.token)
+                    //print(requestToken!.token)
                     var tok = requestToken!.token as! String
                     let url = NSURL(string : "https://api.twitter.com/oauth/authorize?oauth_token=\(tok)") as! URL
                     UIApplication.shared.openURL(url)
@@ -111,7 +116,7 @@ class TwitterClient: BDBOAuth1SessionManager {
         let requestToken = BDBOAuth1Credential(queryString: url.query)
         fetchAccessToken(withPath: "oauth/access_token", method: "POST", requestToken: requestToken, success: { (accessToken: BDBOAuth1Credential?) ->Void in
             
-            print(accessToken!)
+            //print(accessToken!)
             
             self.currentAccount(success: { (user: User) in
                 User.currentUser = user
@@ -130,7 +135,50 @@ class TwitterClient: BDBOAuth1SessionManager {
     
     }
     
+    func favorite(id: String, success: @escaping (Tweet) -> (), faliure: @escaping (Error) -> ()) {
+        post("1.1/favorites/create.json", parameters: ["id": id], progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
+            let response = response as! NSDictionary
+            let tweet = Tweet.init(dictionary: response)
+            success(tweet)
+            
+        }) { (task: URLSessionDataTask?, error: Error) in
+            faliure(error)
+        }
+    }
+    
+    func unfavorite(id: String, success: @escaping (Tweet) -> (), faliure: @escaping (Error) -> ()) {
+        post("1.1/favorites/destroy.json", parameters: ["id": id], progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
+            let response = response as! NSDictionary
+            let tweet = Tweet.init(dictionary: response)
+            success(tweet)
+            
+        }) { (task: URLSessionDataTask?, error: Error) in
+            faliure(error)
+        }
+    }
+    
+    func retweet(id: String, success: @escaping (Tweet) -> (), faliure: @escaping (Error) -> ()) {
+        post("1.1/statuses/retweet/\(id).json", parameters: nil, progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
+            let response = response as! NSDictionary
+            let tweet = Tweet.init(dictionary: response)
+            success(tweet)
+            
+        }) { (task: URLSessionDataTask?, error: Error) in
+            faliure(error)
+        }
+    }
+    
+    func unretweet(id: String, success: @escaping (Tweet) -> (), faliure: @escaping (Error) -> ()) {
+        post("1.1/statuses/unretweet/\(id).json", parameters: nil, progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
+            let response = response as! NSDictionary
+            let tweet = Tweet.init(dictionary: response)
+            success(tweet)
+            
+        }) { (task: URLSessionDataTask?, error: Error) in
+            faliure(error)
+        }
+    }
     
     
 }
- 
+

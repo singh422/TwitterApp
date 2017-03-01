@@ -18,12 +18,18 @@ class Tweet: NSObject {
     var name : NSString?
     var screenName : NSString?
     
+    var id_str: String?
+    var favorited: Bool?
+    var retweeted: Bool?
+    
+    
+    
     init (dictionary : NSDictionary){
         
         
         text = dictionary["text"] as! NSString?
         retweetCount = (dictionary["retweet_count"] as? Int) ?? 0
-        favoritesCount = (dictionary["favourites_count"] as? Int ) ?? 0
+        favoritesCount = (dictionary["favorite_count"] as? Int ) ?? 0
         
         var dict: NSDictionary
         dict = (dictionary["user"] as! NSDictionary?)!
@@ -32,11 +38,9 @@ class Tweet: NSObject {
         name = dict["name"] as! NSString?
         screenName = dict["screen_name"] as! NSString?
         
-        //print(dictionary)
-        //print("Screen name: \(screenName)")
-        
-        //print("imageUrl: \(imageUrl! as String!)")
-        //print("name: \(name)")
+        id_str = dictionary["id_str"] as? String
+        favorited = dictionary["favorited"] as? Bool
+        retweeted = dictionary["retweeted"] as? Bool
         
         let timestampString = dictionary["created_at"] as? String
         
@@ -50,10 +54,10 @@ class Tweet: NSObject {
             //print("time stamp: \(timestampString)")
         }
         
+
+        }
         
-        
-        
-    }
+    
     
     class func tweetsWithArray(dictionaries: [NSDictionary]) -> [Tweet] {
         var tweets = [NSObject]()
@@ -66,7 +70,6 @@ class Tweet: NSObject {
         return tweets as! [Tweet]
     }
 
-    
-    
+       
     
 }

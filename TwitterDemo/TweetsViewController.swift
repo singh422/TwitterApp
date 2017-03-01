@@ -25,6 +25,8 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.delegate = self
         tableView.dataSource = self
         
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 100
         
         TwitterClient.sharedInstance?.homeTimeline(success: { (tweets: [Tweet]) in
             self.tweets12 = tweets
@@ -89,16 +91,7 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     
-    @IBAction func retweetButton(_ sender: Any) {
-    print("retweet Button was clicked")
-        
-    }
     
-    @IBAction func favButton(_ sender: Any) {
-        
-      print("fav Button was clicked")
-        
-    }
     
     
 
