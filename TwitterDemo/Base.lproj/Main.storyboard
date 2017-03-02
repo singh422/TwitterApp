@@ -21,20 +21,33 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c5H-go-FlC">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c5H-go-FlC">
                                 <rect key="frame" x="96" y="348" width="182" height="73"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.6188621649879924" green="1" blue="0.94752250397752391" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="Login with Twitter">
-                                    <color key="titleColor" red="0.28524337811573597" green="0.28524337811573597" blue="0.28524337811573597" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <color key="titleShadowColor" red="0.44430052460000002" green="1" blue="0.97325562259999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="titleColor" red="0.40774496441015218" green="0.40774496441015218" blue="0.40774496441015218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <action selector="onLoginButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="MFe-OI-pAJ"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Twitter_Logo_Blue-1" translatesAutoresizingMaskIntoConstraints="NO" id="BOe-BG-Nj8">
+                                <rect key="frame" x="96" y="54" width="182" height="164"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="164" id="Xgu-yV-qVb"/>
+                                    <constraint firstAttribute="width" constant="182" id="tDk-qW-tcS"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="BOe-BG-Nj8" secondAttribute="trailing" constant="97" id="Zqt-ay-w7A"/>
+                            <constraint firstItem="BOe-BG-Nj8" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="34" id="ciO-qO-974"/>
+                            <constraint firstAttribute="trailing" secondItem="c5H-go-FlC" secondAttribute="trailing" constant="97" id="iNw-i3-jMj"/>
+                            <constraint firstItem="c5H-go-FlC" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="96" id="kqV-I7-TXx"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="c5H-go-FlC" secondAttribute="bottom" constant="246" id="rFN-IB-Ua7"/>
+                            <constraint firstItem="BOe-BG-Nj8" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="96" id="vJQ-LZ-fRf"/>
+                            <constraint firstItem="c5H-go-FlC" firstAttribute="top" secondItem="BOe-BG-Nj8" secondAttribute="bottom" constant="130" id="zTT-CN-4gX"/>
+                        </constraints>
                     </view>
                     <connections>
                         <segue destination="Gjm-A3-Man" kind="presentation" identifier="loginSegue" id="DNQ-Du-oPN"/>
@@ -259,6 +272,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Twitter_Logo_Blue-1" width="400" height="400"/>
         <image name="reply-icon" width="30" height="30"/>
     </resources>
     <color key="tintColor" red="0.1132428599847729" green="0.92871300648792643" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
