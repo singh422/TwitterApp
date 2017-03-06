@@ -6,9 +6,13 @@
 //  Copyright © 2017 Avinash Singh. All rights reserved.
 //
 
+
+
+
 import UIKit
 
-class TweetsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+
+class TweetsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, TweetCellDelegate {
 
     
     
@@ -28,15 +32,10 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 100
         
+        NotificationCenter.default.addObserver(self, selector: #selector(loadList), name: NSNotification.Name(rawValue: "load"), object: nil)
+        
         TwitterClient.sharedInstance?.homeTimeline(success: { (tweets: [Tweet]) in
             self.tweets12 = tweets
-            
-            
-           // for tweet in tweets{
-           // print(tweet.text!)
-            //}
-            
-            
             self.tableView.reloadData()
             
             
@@ -49,6 +48,22 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         
         //tableView.reloadData()
         // Do any additional setup after loading the view.
+    }
+    
+    func loadList(notification: NSNotification){
+        //load data here
+        
+        print("it's coming here")
+        TwitterClient.sharedInstance?.homeTimeline(success: { (tweets: [Tweet]) in
+            self.tweets12 = tweets
+            self.tableView.reloadData()
+            
+            
+        }, failure: { (error: NSError) in
+            print(error.localizedDescription)
+        })
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -77,22 +92,30 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell =   tableView.dequeueReusableCell(withIdentifier: "TweetCell", for: indexPath) as! TweetCell
+        cell.layer.borderWidth = 0.25
+        cell.layer.borderColor = UIColor.lightGray.cgColor
+        cell.selectionStyle = .none
         
         cell.tweet = tweets12[indexPath.row]
+        cell.delegate = self
         
         //let tweet = tweets12[indexPath.row]
         
         //cell.tweetLabel.text = tweet.text as String!
-        
-        
-        
         return cell
     
     }
     
     
     
-    
+    func showUserProfile(cell: TweetCell, user: User)
+   {
+    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+    if let profileVC = storyboard.instantiateViewController(withIdentifier: "UsersProfileViewController") as? UsersProfileViewController {
+        profileVC.user = user
+        self.navigationController?.pushViewController(profileVC, animated: true)
+    }
+    }
     
 
     
@@ -101,11 +124,26 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     */
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        
+        if  let cell = sender as? UITableViewCell{
+        let indexPath = tableView.indexPath(for: cell)
+        let tweet = tweets12![indexPath!.row]
+        let tweetViewController = segue.destination as! TweetViewController
+        tweetViewController.tweet = tweet
+        }
+        
+        else{
+        
+        }
+      
+        
+        
     }
-    */
+   
     
 
 }

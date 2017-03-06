@@ -57,7 +57,7 @@ class TwitterClient: BDBOAuth1SessionManager {
         deauthorize()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: User.userDidLogOutNotification), object: nil)
         
-        //NotificationCenter.defaultCenter.post(name: NSNotification.Name(rawValue: "userDidLogout"), object: nil)
+        //NotificationCenter.default.post(name: NSNotification.Name(rawValue: "userDidLogout"), object: nil)
     }
     
     func homeTimeline(success: @escaping ([Tweet])-> (), failure: @escaping (NSError) -> ()){
@@ -174,6 +174,16 @@ class TwitterClient: BDBOAuth1SessionManager {
             let tweet = Tweet.init(dictionary: response)
             success(tweet)
             
+        }) { (task: URLSessionDataTask?, error: Error) in
+            faliure(error)
+        }
+    }
+    
+    func reply(id: String, text: String, success: @escaping (Tweet) -> (), faliure: @escaping (Error) -> ()) {
+        post("1.1/statuses/update.json", parameters: ["in_reply_to_status_id": id, "status": text], progress: nil, success: { (task: URLSessionDataTask, response: Any?) in
+            let response = response as! NSDictionary
+            let tweet = Tweet.init(dictionary: response)
+                        success(tweet)
         }) { (task: URLSessionDataTask?, error: Error) in
             faliure(error)
         }

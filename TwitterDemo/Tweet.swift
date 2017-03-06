@@ -21,7 +21,7 @@ class Tweet: NSObject {
     var id_str: String?
     var favorited: Bool?
     var retweeted: Bool?
-    
+    var user: User?
     
     
     init (dictionary : NSDictionary){
@@ -53,6 +53,8 @@ class Tweet: NSObject {
             
             //print("time stamp: \(timestampString)")
         }
+        
+        user = User.init(dictionary: dictionary.value(forKey: "user") as! NSDictionary)
         
 
         }

@@ -8,6 +8,11 @@
 
 import UIKit
 
+
+protocol TweetCellDelegate: class  {
+    func showUserProfile(cell: TweetCell, user: User)
+}
+
 class TweetCell: UITableViewCell {
     
 
@@ -25,9 +30,12 @@ class TweetCell: UITableViewCell {
     @IBOutlet weak var retweetImageView: UIImageView!
     
     @IBOutlet weak var favImageView: UIImageView!
-    
+    var delegate: TweetCellDelegate?
     var tweet : Tweet!{
        didSet{
+        
+        nameLabel.text = tweet.name as String!
+        usernameLabel.text = "@" + (tweet.screenName! as String)
         tweetLabel.text = tweet.text as String!
         numRetweets.text = "\(tweet.retweetCount)"
         numFav.text = "\(tweet.favoritesCount)"
@@ -59,13 +67,13 @@ class TweetCell: UITableViewCell {
         {
             self.retweetImageView.image = UIImage(named: "retweet-icon")
         }
-        nameLabel.text = tweet.name as String!
+        
         if tweet.imageUrl != nil {
             //print(tweet.imageUrl!)
             let fileUrl = URL(string: tweet.imageUrl! as String)
             thumbView.setImageWith(fileUrl!)
         }
-        usernameLabel.text = "@" + (tweet.screenName! as String)
+        
         }
     }
     
@@ -135,17 +143,34 @@ class TweetCell: UITableViewCell {
             self.numFav.text = "\(response.favoritesCount)"
             self.tweet.favoritesCount = response.favoritesCount
             self.tweet.favorited = response.favorited
+            //self.tweet!.favorited = false
         }, faliure: { (error: Error) in
             
             TwitterClient.sharedInstance?.unfavorite(id: self.tweet.id_str!, success: { (response: Tweet) in
                 self.favImageView.image = UIImage(named: "favor-icon")
-                self.numFav.text = "\(response.favoritesCount-1)"
+                self.numFav.text = "\(response.favoritesCount)"
                 self.tweet.favoritesCount = response.favoritesCount
                 self.tweet.favorited = response.favorited
+                //self.tweet!.favorited = false
             }, faliure: { (error: Error) in
                 //NOTHING TO BE IMPLEMENTED
             })
         })
     }
+    
+    
+    @IBAction func showUserProfile(_ sender: Any) {
+        print("button tapped")
+        
+        if let delegate = delegate{
+            delegate.showUserProfile(cell: self, user: self.tweet.user!)
+        }
+        else{
+        print("delegate = nil")
+        }
+    
+    }
+    
+    
 
 }

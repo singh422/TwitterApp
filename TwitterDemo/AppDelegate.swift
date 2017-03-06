@@ -20,19 +20,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
        if User.currentUser != nil {
            print("There is a current user")
+        
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyBoard.instantiateViewController(withIdentifier: "TweetsNavigationController")
         window?.rootViewController = vc
+        
+        
+        
         }
-        else{
+        /*else{
             print("there is no current user")
         }
+        */
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: User.userDidLogOutNotification), object: nil, queue: OperationQueue.main) { (Notification) in
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
             let vc = storyBoard.instantiateInitialViewController()
             self.window?.rootViewController = vc
         }
+        
+        window = UIWindow(frame: UIScreen.main.bounds)
+        
+        let storyboard=UIStoryboard(name: "Main", bundle: nil)
+        
+        let tweetsNavigationController = storyboard.instantiateViewController(withIdentifier: "TweetsNavigationController")
+        tweetsNavigationController.tabBarItem.title = "Home"
+        tweetsNavigationController.tabBarItem.image = UIImage(named: "home-icon")
+        
+        
+        let myProfileNavigationController = storyboard.instantiateViewController(withIdentifier: "ProfileViewController")
+        myProfileNavigationController.tabBarItem.title = "my Profile"
+        myProfileNavigationController.tabBarItem.image = UIImage(named: "profile-icon")
+        
+        
+        let tabBarController = UITabBarController()
+        tabBarController.viewControllers = [tweetsNavigationController, myProfileNavigationController]
+ 
+        window?.rootViewController=tabBarController
+        window?.makeKeyAndVisible()
+        
+    
+        
+        
         return true
     }
 
